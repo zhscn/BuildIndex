@@ -41,4 +41,5 @@ private:
   uint64_t entry_size;
   std::atomic_uint64_t entry_next_index; // 分配新的Entry时+1
   std::string index_file_name;
+  int fd;
 };
