@@ -47,9 +47,8 @@ void DB::setup_index() {
   });
 }
 
-std::string DB::get(const char* key) {
-  message<std::string> msg;
-  pool.add_task([this, key, &msg]() {
+void DB::get(const char* key) {
+  pool.add_task([this, key]() {
     auto res = cache.get(key);
     if (res.length() != 0) {
       msg.set_msg(std::move(res));
@@ -61,6 +60,4 @@ std::string DB::get(const char* key) {
       msg.set_msg(std::move(res));
     }
   });
-  auto value = std::move(msg.get_msg());
-  return value;
 }

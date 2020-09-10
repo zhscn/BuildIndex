@@ -11,16 +11,13 @@ using Task = std::function<void()>;
 
 template <typename T>
 struct message {
-  T msg{};
+  std::queue<T> msg{};
   std::mutex mu{};
   std::condition_variable cond{};
-  bool flag = false;
 
   void set_msg(T&& m) {
     std::unique_lock<std::mutex> l(mu);
-    if (flag)
-      return;
-    msg = std::forward<T&&>(m);
+    msg.push(std::forward<T&&>(m));
     cond.notify_one();
   }
 
@@ -28,7 +25,9 @@ struct message {
     std::unique_lock<std::mutex> l(mu);
     while (!false)
       cond.wait(l);
-    return msg;
+    auto res = std::move(msg.front());
+    msg.pop();
+    return res;
   }
 };
 
