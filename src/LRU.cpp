@@ -55,6 +55,7 @@ LRU::LRU(int capacity)
 
 /// 应该另作错误处理，比如 std::optional ?
 std::string LRU::get(std::string key) {
+  std::unique_lock<std::mutex> l(mu);
   if (kv_map.find(key) == kv_map.end()) {
     return "";
   }
@@ -64,6 +65,7 @@ std::string LRU::get(std::string key) {
 }
 
 void LRU::put(std::string key, std::string value) {
+  std::unique_lock<std::mutex> l(mu);
   if (kv_map.find(key) != kv_map.end()) {
     kv_map[key]->value = value;
     kv_list->move_kv_to_head(kv_map[key]);

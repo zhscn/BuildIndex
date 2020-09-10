@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <mutex>
 
 /*
  * 实现LRU算法
@@ -48,4 +49,5 @@ private:
   int size;
   List* kv_list;
   std::map<std::string, Node*> kv_map;
+  std::mutex mu;
 };
