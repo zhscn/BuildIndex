@@ -85,7 +85,7 @@ std::string Index::get(const std::string& key) {
     row_data.read_key_value(ety->offset, kv);
     if (kv.key_size == key.length() &&
         std::strncmp(key.c_str(), kv.key, kv.key_size) == 0) {
-      // kv.value
+      return std::string(kv.value, kv.value_size);
     } else if (ety->next == -1LU) {
       return "";
     } else {
